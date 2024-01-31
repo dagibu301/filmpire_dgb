@@ -4,9 +4,9 @@ import {
   AppBar,
   IconButton,
   Toolbar,
-  Drawer,
   Button,
   Avatar,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Menu,
@@ -15,16 +15,63 @@ import {
   Brightness7,
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 // Syles
 import useStyles from './styles';
 
 const NavBar = () => {
   const classes = useStyles();
+  const isMobile = useMediaQuery('(max-width: 600px)');
+  const theme = useTheme();
+  const isAuthenticated = true;
 
   return (
     <>
       <AppBar position="fixed">
-        <Toolbar className={classes.toolbar}>Hello world</Toolbar>
+        <Toolbar className={classes.toolbar}>
+          {isMobile && (
+            <IconButton
+              color="inherit"
+              edge="start"
+              style={{ outline: 'none' }}
+              onClick={null}
+              className={classes.menuButton}
+            >
+              <Menu />
+            </IconButton>
+          )}
+          <IconButton color="inherit" sx={{ ml: '1' }} onClick={null}>
+            {theme.palette.mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
+          </IconButton>
+          {!isMobile && 'Search...'}
+          <div>
+            {!isAuthenticated ? (
+              <Button color="inherit" onClick={null}>
+                Login &nbsp; <AccountCircle />
+              </Button>
+            ) : (
+              <Button
+                color="inherit"
+                component={Link}
+                to={`/profile/${123}`}
+                className={classes.linkButton}
+                onClick={null}
+              >
+                {!isMobile && (
+                  <>
+                    My Movies &nbsp;
+                    <Avatar
+                      style={{ width: 30, height: 30 }}
+                      alt="Profile"
+                      src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+                    />
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+          {isMobile && 'Search...'}
+        </Toolbar>
       </AppBar>
       <div>hola</div>
     </>
