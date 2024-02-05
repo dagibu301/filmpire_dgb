@@ -16,7 +16,9 @@ import {
   Brightness7,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/styles";
+// Components
+import Sidebar from "../Sidebar";
 // Syles
 import useStyles from "./styles";
 
@@ -36,7 +38,7 @@ const NavBar = () => {
               color="inherit"
               edge="start"
               style={{ outline: "none" }}
-              onClick={null}
+              onClick={() => setMobileOpen((prevState) => !prevState)}
               className={classes.menuButton}
             >
               <Menu />
@@ -82,14 +84,20 @@ const NavBar = () => {
               variant="temporary"
               anchor="right"
               open={mobileOpen}
-              className={classes.drawerBackground}
+              onClose={() => setMobileOpen((prevState) => !prevState)}
               classes={{ paper: classes.drawerPaper }}
               ModalProps={{ keepMounted: true }}
             >
               <Sidebar setMobileOpen={setMobileOpen} />
             </Drawer>
           ) : (
-            <Drawer />
+            <Drawer
+              variant="permanent"
+              classes={{ paper: classes.drawerPaper }}
+              open
+            >
+              <Sidebar setMobileOpen={setMobileOpen} />
+            </Drawer>
           )}
         </nav>
       </div>
