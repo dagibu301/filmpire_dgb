@@ -10,10 +10,15 @@ import {
   ListItemIcon,
   Box,
   CircularProgressBar,
+  CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
 // Syles
 import useStyles from "./styles";
+// Api
+import { useGetGenresQuery } from "../../services/TMDB";
+// Assets
+import genreIcons from "../../assets/genres";
 
 const categories = [
   { label: "Popular", value: "popular" },
@@ -36,6 +41,9 @@ const blueLogo =
 const Sidebar = ({ setMobileOpen }) => {
   const theme = useTheme();
   const classes = useStyles();
+  const { data, isFetching } = useGetGenresQuery();
+
+  console.log(data);
 
   return (
     <>
@@ -68,10 +76,15 @@ const Sidebar = ({ setMobileOpen }) => {
       <Divider />
       <List>
         <ListSubheader>Genres</ListSubheader>
-        {mockCategories.map(({ label, value }) => (
-          <Link className={classes.links} key={value} to={"/"}>
-            <ListItem onClick={null} button>
-              {/* <ListItemIcon>
+        {isFetching ? (
+          <Box display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        ) : (
+          data.genres.map(({ name, id }) => (
+            <Link className={classes.links} key={id} to={"/"}>
+              <ListItem onClick={null} button>
+                {/* <ListItemIcon>
                 <img
                   src={redLogo}
                   className={classes.genreImages}
@@ -79,10 +92,11 @@ const Sidebar = ({ setMobileOpen }) => {
                   alt={label}
                 />
               </ListItemIcon> */}
-              <ListItemText primary={label} />
-            </ListItem>
-          </Link>
-        ))}
+                <ListItemText primary={name} />
+              </ListItem>
+            </Link>
+          ))
+        )}
       </List>
     </>
   );
