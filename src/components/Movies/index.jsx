@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   Typography,
 } from "@mui/material";
-// Store
+// Api
 import { useGetMoviesQuery } from "../../services/TMDB";
 // Components
 import MovieList from "../MovieList";
