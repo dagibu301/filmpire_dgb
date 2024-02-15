@@ -14,13 +14,13 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/styles";
 import { useDispatch, useSelector } from "react-redux";
+import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
 // Syles
 import useStyles from "./styles";
 // Api
 import { useGetGenresQuery } from "../../services/TMDB";
 // Assets
 import genreIcons from "../../assets/genres";
-import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
 
 const categories = [
   { label: "Popular", value: "popular" },

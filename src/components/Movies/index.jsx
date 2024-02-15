@@ -14,12 +14,13 @@ import MovieList from "../MovieList";
 
 const Movies = () => {
   const [page, setPage] = useState(1);
-  const { genreIdOrCategoryName } = useSelector(
+  const { genreIdOrCategoryName, searchQuery } = useSelector(
     (store) => store.genreOrCategory
   );
   const { data, error, isFetching } = useGetMoviesQuery({
     genreIdOrCategoryName,
     page,
+    searchQuery,
   });
 
   if (isFetching) {
