@@ -1,5 +1,5 @@
 // Libs
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   IconButton,
@@ -20,6 +20,8 @@ import { useTheme } from "@mui/styles";
 // Components
 import Sidebar from "../Sidebar";
 import Search from "../Search";
+// Utils
+import { fetchToken, createSessionId, moviesApi } from "../../utils";
 // Syles
 import useStyles from "./styles";
 
@@ -28,7 +30,29 @@ const NavBar = () => {
   const classes = useStyles();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
-  const isAuthenticated = true;
+  const isAuthenticated = false;
+
+  const token = localStorage.getItem("request_token");
+  const sessionIdFromLocalStorage = localStorage.getItem("session_id");
+
+  useEffect(() => {
+    const logInUser = async () => {
+      if (token) {
+        if (sessionIdFromLocalStorage) {
+          const { data: userData } = await moviesApi.get(
+            `/account?session_id=${sessionIdFromLocalStorage}`
+          );
+        } else {
+          const sessionId = await createSessionId(token);
+          const { data: userData } = await moviesApi.get(
+            `/account?session_id=${sessionId}`
+          );
+        }
+      }
+    };
+
+    logInUser();
+  }, [sessionIdFromLocalStorage, token]);
 
   return (
     <>
@@ -51,7 +75,7 @@ const NavBar = () => {
           {!isMobile && <Search />}
           <div>
             {!isAuthenticated ? (
-              <Button color="inherit" onClick={null}>
+              <Button color="inherit" onClick={fetchToken}>
                 Login &nbsp; <AccountCircle />
               </Button>
             ) : (
