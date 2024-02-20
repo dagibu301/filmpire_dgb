@@ -1,5 +1,6 @@
 // Libs
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AppBar,
   IconButton,
@@ -20,17 +21,20 @@ import { useTheme } from "@mui/styles";
 // Components
 import Sidebar from "../Sidebar";
 import Search from "../Search";
+// Store
+import { setUser, userSelector } from "../../features/auth";
 // Utils
 import { fetchToken, createSessionId, moviesApi } from "../../utils";
 // Syles
 import useStyles from "./styles";
 
 const NavBar = () => {
+  const { isAuthenticated, user } = useSelector(userSelector);
+  const dispatch = useDispatch();
   const [mobileOpen, setMobileOpen] = useState(false);
   const classes = useStyles();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const theme = useTheme();
-  const isAuthenticated = false;
 
   const token = localStorage.getItem("request_token");
   const sessionIdFromLocalStorage = localStorage.getItem("session_id");
@@ -42,17 +46,19 @@ const NavBar = () => {
           const { data: userData } = await moviesApi.get(
             `/account?session_id=${sessionIdFromLocalStorage}`
           );
+          dispatch(setUser(userData));
         } else {
           const sessionId = await createSessionId(token);
           const { data: userData } = await moviesApi.get(
             `/account?session_id=${sessionId}`
           );
+          dispatch(setUser(userData));
         }
       }
     };
 
     logInUser();
-  }, [sessionIdFromLocalStorage, token]);
+  }, [dispatch, sessionIdFromLocalStorage, token]);
 
   return (
     <>
@@ -82,7 +88,7 @@ const NavBar = () => {
               <Button
                 color="inherit"
                 component={Link}
-                to={`/profile/${123}`}
+                to={`/profile/${user.id}`}
                 className={classes.linkButton}
                 onClick={null}
               >
