@@ -7,8 +7,7 @@ import useStyles from "./styles";
 
 const MovieList = ({ movies }) => {
   const classes = useStyles();
-  console.log(movies)
-
+  
   return (
     <Grid container className={classes.moviesContainer}>
       {movies.results.map((movie, index) => (
