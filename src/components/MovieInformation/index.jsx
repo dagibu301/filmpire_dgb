@@ -1,4 +1,8 @@
+// Libs
 import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import {
   Modal,
   Typography,
@@ -7,7 +11,6 @@ import {
   Grid,
   Box,
   CircularProgress,
-  useMediaQuery,
   Rating,
 } from "@mui/material";
 import {
@@ -20,21 +23,21 @@ import {
   Remove,
   ArrowBack,
 } from "@mui/icons-material";
-import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-
+// Store
 import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
-import useStyles from "./styles";
+import { userSelector } from "../../features/auth";
+// Utils
 import {
   useGetMovieQuery,
   useGetRecommendationsQuery,
   useGetListQuery,
   useGetWatchProvidersQuery,
 } from "../../services/TMDB";
-import genreIcons from "../../assets/genres";
 import { MovieList } from "..";
-import { userSelector } from "../../features/auth";
+// Styles
+import useStyles from "./styles";
+// Assets
+import genreIcons from "../../assets/genres";
 
 const MovieInformation = () => {
   const { user } = useSelector(userSelector);
@@ -107,7 +110,7 @@ const MovieInformation = () => {
     setIsMovieWatchlisted((prev) => !prev);
   };
 
-  if (isFetching) {
+  if (isFetching || isRecommendationsFetching || isWatchProvidersFetching) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center">
         <CircularProgress size="8rem" />
@@ -169,6 +172,7 @@ const MovieInformation = () => {
             >
               <img
                 src={genreIcons[genre.name.toLowerCase()]}
+                alt={genre.name}
                 className={classes.genreImage}
                 height={30}
               />
