@@ -1,11 +1,11 @@
 // Libs
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { CssBaseline } from '@mui/material';
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import { CssBaseline } from "@mui/material";
 // Components
-import { Actors, MovieInformation, Movies, Profile, NavBar } from '.';
+import { Actors, MovieInformation, Movies, Profile, NavBar } from ".";
 // Syles
-import useStyles from './styles';
+import useStyles from "./styles";
 
 const App = () => {
   const classes = useStyles();
@@ -23,7 +23,7 @@ const App = () => {
           <Route exact path="/actors/:id">
             <Actors />
           </Route>
-          <Route exact path="/">
+          <Route exact path={["/", "/approved"]}>
             <Movies />
           </Route>
           <Route exact path="/profile/:id">

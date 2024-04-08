@@ -1,8 +1,4 @@
-// Libs
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import {
   Modal,
   Typography,
@@ -23,21 +19,20 @@ import {
   Remove,
   ArrowBack,
 } from "@mui/icons-material";
-// Store
+import { Link, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+
 import { selectGenreOrCategory } from "../../features/currentGenreOrCategory";
-import { userSelector } from "../../features/auth";
-// Utils
+import useStyles from "./styles";
 import {
   useGetMovieQuery,
   useGetRecommendationsQuery,
   useGetListQuery,
-  useGetWatchProvidersQuery,
 } from "../../services/TMDB";
-import { MovieList } from "..";
-// Styles
-import useStyles from "./styles";
-// Assets
 import genreIcons from "../../assets/genres";
+import { MovieList } from "..";
+import { userSelector } from "../../features/auth";
 
 const MovieInformation = () => {
   const { user } = useSelector(userSelector);
@@ -47,8 +42,6 @@ const MovieInformation = () => {
   const [open, setOpen] = useState(false);
 
   const { data, isFetching, error } = useGetMovieQuery(id);
-  const { data: watchProviders, isFetching: isWatchProvidersFetching } =
-    useGetWatchProvidersQuery(id);
   const { data: favoriteMovies } = useGetListQuery({
     listName: "favorite/movies",
     accountId: user.id,
@@ -61,10 +54,11 @@ const MovieInformation = () => {
     sessionId: localStorage.getItem("session_id"),
     page: 1,
   });
-  const { data: recommendations, isFetching: isRecommendationsFetching } =
-    useGetRecommendationsQuery({ list: "/recommendations", movie_id: id });
+  const { data: recommendations } = useGetRecommendationsQuery({
+    list: "/recommendations",
+    movie_id: id,
+  });
 
-  console.log(watchProviders);
   const [isMovieFavorited, setIsMovieFavorited] = useState(false);
   const [isMovieWatchlisted, setIsMovieWatchlisted] = useState(false);
 
@@ -95,6 +89,8 @@ const MovieInformation = () => {
     setIsMovieFavorited((prev) => !prev);
   };
 
+  console.log({ isMovieWatchlisted });
+
   const addToWatchlist = async () => {
     await axios.post(
       `https://api.themoviedb.org/3/account/${user.id}/watchlist?api_key=${
@@ -110,7 +106,7 @@ const MovieInformation = () => {
     setIsMovieWatchlisted((prev) => !prev);
   };
 
-  if (isFetching || isRecommendationsFetching || isWatchProvidersFetching) {
+  if (isFetching) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center">
         <CircularProgress size="8rem" />
@@ -172,7 +168,7 @@ const MovieInformation = () => {
             >
               <img
                 src={genreIcons[genre.name.toLowerCase()]}
-                alt={genre.name}
+                alt={genreIcons[genre.name.toLowerCase()]}
                 className={classes.genreImage}
                 height={30}
               />

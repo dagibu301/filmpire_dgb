@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import store from "./app/store";
 // Components
 import App from "./components/App";
+// Styles
+import "./index.css";
 
 const theme = createTheme({});
 
