@@ -5,7 +5,7 @@ import { ExitToApp } from '@mui/icons-material';
 
 import { useGetListQuery } from '../../services/TMDB';
 import { userSelector } from '../../features/auth';
-import RatedCards from '../RatedCards/RatedCards';
+import { RatedCards } from '..';
 
 const Profile = () => {
   const { user } = useSelector(userSelector);
